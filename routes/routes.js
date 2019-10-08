@@ -32,40 +32,43 @@ module.exports = function (app) {
         });
     });
 
+    $(document).on("click", "button.scrape", function (event) {
 
-    app.get("/scrape", function (req, res) {
-        // Make a request via axios for the article section of reddit
-        axios.get("https://www.nytimes.com/section/world").then(function (response) {
-            // Load the html body from axios into cheerio
-            var $ = cheerio.load(response.data);
-            // For each element with a "title" class
-            $("h2").each(function (i, element) {
-                // Save the text and href of each link enclosed in the current element
-                var title = $(element).children().text();
-                var link = $(element).find("a").attr("href");
 
-                // If this found element had both a title and a link
-                if (title && link) {
-                    // Insert the data in the scrapedData db
-                    db.article.insert({
-                        title: title,
-                        link: link
-                    },
-                        function (err, inserted) {
-                            if (err) {
-                                // Log the error if one is encountered during the query
-                                console.log(err);
-                            }
-                            else {
-                                // Otherwise, log the inserted data
-                                console.log(inserted);
-                            }
-                        });
-                }
+        app.get("/scrape", function (req, res) {
+            // Make a request via axios for the article section of reddit
+            axios.get("https://www.nytimes.com/section/world").then(function (response) {
+                // Load the html body from axios into cheerio
+                var $ = cheerio.load(response.data);
+                // For each element with a "title" class
+                $("h2").each(function (i, element) {
+                    // Save the text and href of each link enclosed in the current element
+                    var title = $(element).children().text();
+                    var link = $(element).find("a").attr("href");
+
+                    // If this found element had both a title and a link
+                    if (title && link) {
+                        // Insert the data in the scrapedData db
+                        db.article.insert({
+                            title: title,
+                            link: link
+                        },
+                            function (err, inserted) {
+                                if (err) {
+                                    // Log the error if one is encountered during the query
+                                    console.log(err);
+                                }
+                                else {
+                                    // Otherwise, log the inserted data
+                                    console.log(inserted);
+                                }
+                            });
+                    }
+                });
             });
-        });
 
-        // Send a "Scrape Complete" message to the browser
-        res.send("Scrape Complete");
+            // Send a "Scrape Complete" message to the browser
+            res.send("Scrape Complete");
+        });
     });
 };
