@@ -7,6 +7,17 @@ var cheerio = require("cheerio");
 var mongoose = require("mongoose");
 // Initialize Express
 var app = express();
+app.use(express.static("public"));
+
+// Parse application body as JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // Database configuration
 var databaseUrl = "newsScrape";
@@ -20,6 +31,9 @@ db.on("error", function (error) {
 // var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/redditScrape";
 
 // mongoose.connect(MONGODB_URI);
+app.get("/", function (req, res) {
+    res.render("index")
+});
 
 app.get("/all", function (req, res) {
     // Find all results from the scrapedData collection in the db
