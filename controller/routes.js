@@ -37,17 +37,19 @@ module.exports = function (app) {
             // Load the html body from axios into cheerio
             var $ = cheerio.load(response.data);
             // For each element with a "title" class
-            $("h2").each(function (i, element) {
+            $("article").each(function (i, element) {
                 // Save the text and href of each link enclosed in the current element
-                var title = $(element).children().text();
+                var title = $(element).children().children("h2").text();
                 var link = $(element).find("a").attr("href");
+                var snip = $(element).children().children("p").text();
 
                 // If this found element had both a title and a link
                 if (title && link) {
                     // Insert the data in the scrapedData db
                     db.article.insert({
                         title: title,
-                        link: link
+                        link: link,
+                        snip: snip
                     },
                         function (err, inserted) {
                             if (err) {
