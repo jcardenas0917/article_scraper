@@ -31,10 +31,6 @@ module.exports = function (app) {
             }
         });
     });
-
-
-
-
     app.get("/scrape", function (req, res) {
         // Make a request via axios for the article section of reddit
         axios.get("https://www.nytimes.com/section/world").then(function (response) {
@@ -70,4 +66,10 @@ module.exports = function (app) {
         // Send a "Scrape Complete" message to the browser
         res.send("Scrape Complete");
     })
+
+    app.get("/drop", function (req, res) {
+        // Find all results from the scrapedData collection in the db
+        db.article.drop();
+        res.send("Collection Dropped")
+    });
 };

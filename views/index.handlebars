@@ -1,25 +1,26 @@
-<div class="menuContainer">
-    <div class="row menu">
-        <div class="col-3">
-            <h1 class="title">NY Times Scraper</h1>
-        </div>
-        <div class="col-1">
-            <p class="home">Home</p>
-        </div>
-        <div class="col-1">
-            <p class="saved">Saved Articles</p>
-        </div>
-        <div class="col-2">
-            <button type="button" class="btn btn-success scrape">SCRAPE NEW ARTICLES</button>
-        </div>
-
-        <div class="col-2">
-            <button type="button" class="btn btn-danger clear">CLEAR ARTICLES</button>
-        </div>
-
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">NY Times Scraper</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" id="home" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="saveed" href="#">Saved Articles</a>
+            </li>
+            <li class="nav-item p-1">
+                <button type="button" id="scrape" class="btn btn-success">SCRAPE NEW ARTICLES!</button>
+            </li>
+            <li class="nav-item p-1">
+                <button type="button" id="clear" class="btn btn-danger">CLEAR ARTICLES!</button>
+            </li>
+        </ul>
     </div>
-
-</div>
+</nav>
 <div class="jumbotron">
     <div class="row">
         <div class="col-3">
@@ -37,3 +38,28 @@
         </div>
     </div>
 </div>
+
+<style>
+    .jumbotron {
+        margin-top: 0px;
+        background-image: linear-gradient(0deg,
+                rgba(255, 255, 255, 0.7),
+                rgba(255, 255, 255, 0.7)),
+            url("../assets/background.jpg");
+        background-size: cover;
+        min-height: 70vh;
+        position: relative;
+    }
+
+    body {
+        background-image: url("../assets/site.png")
+    }
+
+    .lead,
+    .mainTitle {
+        text-align: center;
+        font-weight: bold;
+        color: steelblue;
+        font: italic
+    }
+</style>
