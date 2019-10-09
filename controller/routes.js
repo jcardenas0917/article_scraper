@@ -15,10 +15,15 @@ module.exports = function (app) {
     });
 
     app.get("/", function (req, res) {
-        res.render("index")
+        db.article.find({}, function (erro, data) {
+            var hbsObject = {
+                articles: data
+            };
+            res.render("index", hbsObject);
+        });
     });
 
-    app.get("/all", function (req, res) {
+    app.get("/api/all", function (req, res) {
         // Find all results from the scrapedData collection in the db
         db.article.find({}, function (error, found) {
             // Throw any errors to the console

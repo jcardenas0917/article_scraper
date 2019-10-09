@@ -1,7 +1,22 @@
 $(function () {
 
 
-    let displayArticles = () => {
+    let displayArticles = articles => {
+        articles.slice(-10).forEach(article => {
+            // var div = $("<div>").append(
+            //     $("<p>").text(article.title),
+            //     $("<p>").text(article.link),
+            //     $("<p>").text(article.snip)
+            // );
+            // $("#display").append(div)
+            var div = $("<div>").attr("class", "card").css("width", "89rem").append(
+                $("<ul>").attr("class", "list-group list-group-flush"),
+                $("<a>").attr("class", "list-group list-group-flush").attr("href", "nytimes.com" + article.link).text(article.title),
+                // $("<li>").attr("class", "list-group-item").text(article.link),
+                $("<li>").attr("class", "list-group-item").text(article.snip),
+            )
+            $("#display").append(div)
+        })
 
     }
     $("#home").on("click", event => {
@@ -15,8 +30,8 @@ $(function () {
         $.getJSON("/scrape", function (data) {
         });
 
-        $.getJSON("/all", data => {
-            console.log(data)
+        $.getJSON("/api/all", data => {
+            displayArticles(data)
         });
     });
 
