@@ -18,7 +18,7 @@ app.set("view engine", "handlebars");
 // var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/redditScrape";
 
 // mongoose.connect(MONGODB_URI);
-require("./routes/routes.js")(app)
+require("./controller/routes.js")(app)
 // Listen on port 3000
 app.listen(3000, function () {
     console.log("App running on port 3000!");
