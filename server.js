@@ -16,9 +16,8 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScrape";
 mongoose.connect(MONGODB_URI);
-// let db = mongoose.connection;
 
-require("./controller/routes.js")(app)
+require("./routes/routes.js")(app)
 // Listen on port 3000
 app.listen(3000, function () {
     console.log("App running on port 3000!");

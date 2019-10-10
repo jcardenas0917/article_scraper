@@ -7,7 +7,7 @@ $(function () {
                 $("<div>").attr("class", "card-body").append(
                     $("<a>").attr("href", "http://nytimes.com" + article.link).attr("target", "_blank").html("<h3>" + article.title + "</h3"),
                     $("<p>").attr("class", "card-text").text(article.snip),
-                    $("<button>").attr("class", "btn btn-success").text("Save Article")
+                    $("<button>").attr("class", "btn btn-success save").text("Save Article")
                 )
             )
             $("#display").append(div)
@@ -21,7 +21,7 @@ $(function () {
         })
     })
     $("#scrape").on("click", event => {
-        // event.preventDefault();
+        event.preventDefault();
         $.getJSON("/scrape", function (data) {
 
         });
@@ -40,4 +40,11 @@ $(function () {
         console.log("collection dropped")
         $("#display").empty();
     });
+
+    $(".save").on("click", event => {
+        $.ajax("/articles/:id", {
+            type: "POST",
+            data
+        })
+    })
 });
