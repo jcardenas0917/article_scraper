@@ -35,20 +35,20 @@ module.exports = function (app) {
     });
 
     app.get("/", function (req, res) {
-        res.render("index");
+        db.Article.find({}, function (err, data) {
+            let hbsObject = {
+                articles: data
+            };
+            console.log(data)
+            res.render("index", hbsObject);
+        })
     });
 
     app.get("/articles", function (req, res) {
         // Find all results from the scrapedData collection in the db
-        db.Article.find({}, function (error, found) {
-            // Throw any errors to the console
-            if (error) {
-                console.log(error);
-            }
-            // If there are no errors, send the data to the browser as json
-            else {
-                res.json(found);
-            }
+        db.Article.find({}, function (error, data) {
+            console.log(data)
+            res.json(data);
         });
     });
 
