@@ -1,31 +1,46 @@
-var mongojs = require("mongojs");
-// Require axios and cheerio. This makes the scraping possible
-var axios = require("axios");
-var cheerio = require("cheerio");
+let mongojs = require("mongojs");
+let axios = require("axios");
+let cheerio = require("cheerio");
+let db = require("../models");
 module.exports = function (app) {
 
     // Database configuration
-    var databaseUrl = "newsScrape";
-    var collections = ["article"];
+    app.get("/scrape", function (req, res) {
+        // Make a request via axios for the article section of reddit
+        axios.get("https://www.nytimes.com/section/world").then(function (response) {
+            // Load the html body from axios into cheerio
+            var $ = cheerio.load(response.data);
+            // For each element with a "title" class
+            $("article").each(function (i, element) {
+                // Save the text and href of each link enclosed in the current element
+                let result = {};
+                result.title = $(element).children().children("h2").text();
+                result.link = $(element).find("a").attr("href");
+                result.snip = $(element).children().children("p").text();
 
-    // Hook mongojs configuration to the db variable
-    var db = mongojs(databaseUrl, collections);
-    db.on("error", function (error) {
-        console.log("Database Error:", error);
-    });
-
-    app.get("/", function (req, res) {
-        db.article.find({}, function (erro, data) {
-            var hbsObject = {
-                articles: data
-            };
-            res.render("index", hbsObject);
+                // // If this found element had both a title and a link
+                // if (title && link) {
+                // Insert the data in the scrapedData db
+                db.Article.create(result)
+                    .then(dbArticle => {
+                        console.log(dbArticle)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            });
+            // Send a "Scrape Complete" message to the browser
+            res.send("Scrape Complete");
         });
     });
 
-    app.get("/api/all", function (req, res) {
+    app.get("/", function (req, res) {
+        res.render("index");
+    });
+
+    app.get("/articles", function (req, res) {
         // Find all results from the scrapedData collection in the db
-        db.article.find({}, function (error, found) {
+        db.Article.find({}, function (error, found) {
             // Throw any errors to the console
             if (error) {
                 console.log(error);
@@ -36,47 +51,12 @@ module.exports = function (app) {
             }
         });
     });
-    app.get("/scrape", function (req, res) {
-        // Make a request via axios for the article section of reddit
-        axios.get("https://www.nytimes.com/section/world").then(function (response) {
-            // Load the html body from axios into cheerio
-            var $ = cheerio.load(response.data);
-            // For each element with a "title" class
-            $("article").each(function (i, element) {
-                // Save the text and href of each link enclosed in the current element
-                var title = $(element).children().children("h2").text();
-                var link = $(element).find("a").attr("href");
-                var snip = $(element).children().children("p").text();
-
-                // If this found element had both a title and a link
-                if (title && link) {
-                    // Insert the data in the scrapedData db
-                    db.article.insert({
-                        title: title,
-                        link: link,
-                        snip: snip
-                    },
-                        function (err, inserted) {
-                            if (err) {
-                                // Log the error if one is encountered during the query
-                                console.log(err);
-                            }
-                            else {
-                                // Otherwise, log the inserted data
-                                console.log(inserted);
-                            }
-                        });
-                }
-            });
-        });
-
-        // Send a "Scrape Complete" message to the browser
-        res.send("Scrape Complete");
-    })
 
     app.get("/drop", function (req, res) {
         // Find all results from the scrapedData collection in the db
-        db.article.drop();
+        db.Article.deleteMany({}, function (err, del) {
+
+        });
         res.send("Collection Dropped")
     });
 };
