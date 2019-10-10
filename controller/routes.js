@@ -18,9 +18,7 @@ module.exports = function (app) {
                 result.link = $(element).find("a").attr("href");
                 result.snip = $(element).children().children("p").text();
 
-                // // If this found element had both a title and a link
-                // if (title && link) {
-                // Insert the data in the scrapedData db
+
                 db.Article.create(result)
                     .then(dbArticle => {
                         console.log(dbArticle)
@@ -36,14 +34,13 @@ module.exports = function (app) {
 
     app.get("/", function (req, res) {
         db.Article.find({}, function (err, data) {
-            let hbsObject = {
-                articles: data
-            };
-            console.log(data)
-            res.render("index", hbsObject);
+            // let hbsObject = {
+            //     articles: data
+            // };
+            // console.log(data)
+            res.render("index");
         })
     });
-
     app.get("/articles", function (req, res) {
         // Find all results from the scrapedData collection in the db
         db.Article.find({}, function (error, data) {
