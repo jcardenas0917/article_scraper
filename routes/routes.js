@@ -33,7 +33,10 @@ module.exports = function (app) {
 
     app.get("/", function (req, res) {
         db.Article.find({}, function (err, data) {
-            res.render("index");
+            let hbsObject = {
+                articles: data
+            };
+            res.render("index", hbsObject);
         })
     });
     app.get("/saved", function (req, res) {
@@ -69,7 +72,7 @@ module.exports = function (app) {
         });
     });
 
-    app.put("/delete/:id", function (req, res) {
+    app.delete("/delete-Article/:id", function (req, res) {
         db.Article.findByIdAndUpdate({ _id: req.params.id },
             {
                 $set: { saved: false }
