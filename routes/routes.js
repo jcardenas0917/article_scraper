@@ -41,6 +41,15 @@ module.exports = function (app) {
             res.render("index");
         })
     });
+    app.get("/saved", function (req, res) {
+        db.Article.find({}, function (err, data) {
+            let hbsObject = {
+                articles: data
+            };
+            console.log(data)
+            res.render("saved", hbsObject);
+        });
+    });
     app.get("/articles", function (req, res) {
         // Find all results from the scrapedData collection in the db
         db.Article.find({}, function (error, data) {
@@ -57,21 +66,63 @@ module.exports = function (app) {
         res.send("Collection Dropped")
     });
 
+    app.put("/save/:id", function (req, res) {
+        db.Article.findByIdAndUpdate({ _id: req.params.id }, {
+            $set: { saved: true }
+        }).then(function (data) {
+            res.json(data);
+        });
+    });
 
-    app.post("/articles/:id", function (req, res) {
-        // Create a new note and pass the req.body to the entry
+
+    app.put("/delete/:id", function (req, res) {
+        db.Article.findByIdAndUpdate({ _id: req.params.id },
+            {
+                $set: { saved: false }
+            }).then(function (data) {
+                res.json(data);
+            });
+    });
+
+    app.post("/comment/:id", function (req, res) {
+        console.log(req.body);
         db.Comment.create(req.body)
             .then(function (dbComment) {
-
-                return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbComment._id }, { new: true });
-            })
-            .then(function (dbArticle) {
-                // If we were able to successfully update an Article, send it back to the client
+                console.log(dbComment._id)
+                return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { note: dbComment._id } }, { new: true });
+            }).then(function (dbArticle) {
                 res.json(dbArticle);
-            })
-            .catch(function (err) {
-                // If an error occurred, send it to the client
+            }).catch(function (err) {
                 res.json(err);
             });
     });
+
+    app.get("/show-comment/:id", function (req, res) {
+        db.Article.findById(req.params.id)
+            .populate("comment")
+            .then(function (dbArticle) {
+                res.json(dbArticle);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+
+    });
+
+    app.delete("/delete-comment/:id", function (req, res) {
+        db.Note.findByIdAndRemove(req.params.id, (err, comment) => {
+            if (err) return res.status(500).send(err);
+            return res.status(200).send();
+        });
+
+    });
+
+    app.get("/display-saved/", function (req, res) {
+        db.Article.find(
+            { saved: true }
+        ).then(function (data) {
+            res.json(data);
+        });
+    });
+
 };

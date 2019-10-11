@@ -21,7 +21,14 @@ let ArticleSchema = new Schema({
     comments: {
         type: Schema.Types.ObjectId,
         ref: "Comment"
-    }
+    },
+    saved: {
+        type: Boolean,
+        default: false
+    },
+
+    article: String
+
 
 });
 
