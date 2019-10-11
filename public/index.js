@@ -14,24 +14,15 @@ $(function () {
         })
 
     }
-    $("#home").on("click", event => {
-        event.preventDefault();
-        $.get("/", function () {
-            console.log("homepage")
-        })
-    })
     $("#scrape").on("click", event => {
         event.preventDefault();
         $.getJSON("/scrape", function (data) {
 
         });
-
         $.getJSON("/articles", data => {
             displayArticles(data);
         });
     });
-
-
     $("#clear").on("click", event => {
         event.preventDefault();
         $.getJSON("/drop", () => {
@@ -53,4 +44,11 @@ $(function () {
 
         });
     });
+
+    // $("#saved").on("click", event => {
+    //     event.preventDefault();
+    //     $.get("/saved", function () {
+    //         console.log("saved")
+    //     })
+    // });
 });

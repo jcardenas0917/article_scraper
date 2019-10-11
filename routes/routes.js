@@ -1,4 +1,3 @@
-let mongojs = require("mongojs");
 let axios = require("axios");
 let cheerio = require("cheerio");
 let db = require("../models");
@@ -34,10 +33,6 @@ module.exports = function (app) {
 
     app.get("/", function (req, res) {
         db.Article.find({}, function (err, data) {
-            // let hbsObject = {
-            //     articles: data
-            // };
-            // console.log(data)
             res.render("index");
         })
     });
@@ -73,7 +68,6 @@ module.exports = function (app) {
             res.json(data);
         });
     });
-
 
     app.put("/delete/:id", function (req, res) {
         db.Article.findByIdAndUpdate({ _id: req.params.id },
