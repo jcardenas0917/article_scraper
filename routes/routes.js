@@ -64,7 +64,7 @@ module.exports = function (app) {
         res.send("Collection Dropped")
     });
 
-    app.put("/save/:id", function (req, res) {
+    app.put("/save-Article/:id", function (req, res) {
         db.Article.findByIdAndUpdate({ _id: req.params.id }, {
             $set: { saved: true }
         }).then(function (data) {

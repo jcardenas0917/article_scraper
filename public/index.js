@@ -22,7 +22,7 @@ $(function () {
 
         $.ajax({
             type: "PUT",
-            url: "/save/" + id,
+            url: "/save-Article/" + id,
         }).then(function (response) {
             alert("Article Saved")
 
