@@ -107,7 +107,7 @@ module.exports = function (app) {
     });
 
     app.delete("/delete-comment/:id", function (req, res) {
-        db.Note.findByIdAndRemove(req.params.id, (err, comment) => {
+        db.Comment.findByIdAndRemove(req.params.id, (err, comment) => {
             if (err) return res.status(500).send(err);
             return res.status(200).send();
         });
