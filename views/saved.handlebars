@@ -7,14 +7,14 @@
                 <h3 class="card-title">{{this.title}}</h3>
             </a>
             <p class="card-subtitle mb-2 text-muted">{{this.snip}}</p>
-            <button type="button" class="btn btn-success addComment" id="{{this._id}}" data-toggle="modal"
-                data-target="#commentModal">
+            <button type="button" class="btn btn-success addComment" id="comment" data-toggle="modal"
+                data-target="#article{{this._id}}">
                 Comment
             </button>
             <button type="button" class="btn btn-danger deleteArticle" id="{{this._id}}">Delete</button>
         </div>
     </div>
-    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="article{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

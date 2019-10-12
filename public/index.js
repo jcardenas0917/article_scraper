@@ -1,7 +1,7 @@
 $(function () {
     $("#scrape").on("click", event => {
         event.preventDefault();
-        $.getJSON("/scrape", function (data) {
+        $.getJSON("/scrape", data => {
 
         });
         location.reload();
@@ -16,7 +16,7 @@ $(function () {
         $("#savedCard").empty();
     });
 
-    $(document).on("click", '.saved', function () {
+    $(document).on("click", '.saved', () => {
         var id = $(this).attr('id');
         console.log("Article ID: " + id);
 
@@ -29,7 +29,7 @@ $(function () {
         });
     });
 
-    $(".deleteArticle").on("click", function () {
+    $(".deleteArticle").on("click", () => {
         console.log("deleteButton clicked");
         var id = $(this).attr('id');
         $.ajax("/delete-Article/" + id, {
