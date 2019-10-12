@@ -17,15 +17,15 @@ let ArticleSchema = new Schema({
         type: String,
         required: true
     },
-
-    comments: {
-        type: Schema.Types.ObjectId,
-        ref: "Comment"
-    },
     saved: {
         type: Boolean,
         default: false
     },
+
+    comment: {
+        type: Schema.Types.ObjectId,
+        ref: "Comment"
+    }
 });
 
 let Article = mongoose.model("Article", ArticleSchema);

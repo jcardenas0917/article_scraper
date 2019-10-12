@@ -1,12 +1,12 @@
 $(function () {
-    $("#scrape").on("click", event => {
+    $("#scrape").on("click", function (event) {
         event.preventDefault();
-        $.getJSON("/scrape", data => {
+        $.getJSON("/scrape", function (data) {
 
         });
         location.reload();
     });
-    $("#clear").on("click", event => {
+    $("#clear").on("click", function (event) {
         event.preventDefault();
         $.getJSON("/drop", () => {
 
@@ -16,7 +16,7 @@ $(function () {
         $("#savedCard").empty();
     });
 
-    $(document).on("click", '.saved', () => {
+    $(document).on("click", '.saved', function () {
         var id = $(this).attr('id');
         console.log("Article ID: " + id);
 
@@ -29,7 +29,7 @@ $(function () {
         });
     });
 
-    $(".deleteArticle").on("click", () => {
+    $(".deleteArticle").on("click", function () {
         console.log("deleteButton clicked");
         var id = $(this).attr('id');
         $.ajax("/delete-Article/" + id, {
@@ -40,4 +40,39 @@ $(function () {
                 location.reload();
             });
     });
+
+
+    $(".saveComment").on("click", function () {
+        let newComment = {
+            author: $("#author").val().trim(),
+            body: $("#userComment").val().trim()
+
+        }
+        var id = $(this).attr('id');
+        console.log("clicked" + id);
+        $.ajax({
+            url: "/articles/" + id,
+            method: "POST",
+            data: newComment
+        }).then(
+            function (data) {
+                console.log(data);
+            });
+    });
+
+    $(".addComment").on("click", function () {
+        var id = $(this).attr('id');
+        console.log("clicked" + id);
+        $.ajax({
+            url: "/articles/" + id,
+            method: "GET",
+        }).then(
+            function (data) {
+                console.log(data);
+                // data.forEach(function (comment, index) {
+                //     $("#savedComment").append(data[index].author, data[index].body)
+                // })
+            });
+    });
+
 });

@@ -3,10 +3,11 @@ let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 
 let CommentSchema = new Schema({
-    comment: String,
-    article: {
-        type: Schema.Types.ObjectId,
-        ref: "Article"
+    author: {
+        type: String
+    },
+    body: {
+        type: String
     }
 });
 
