@@ -44,8 +44,9 @@ $(function () {
 
     $(".saveComment").on("click", function () {
 
-        let id = $(this).attr('id');
+        let id = $(this).attr('data-id');
         console.log("clicked" + id);
+        console.log($(".userComment").val().trim());
         $.ajax({
             url: "/articles/" + id,
             method: "POST",
@@ -76,6 +77,7 @@ $(function () {
 
     $(".addComment").on("click", function () {
         var id = $(this).attr('id');
+        $(".saveComment").attr("data-id", id)
         console.log("clicked" + id);
         $.ajax({
             url: "/articles/" + id,

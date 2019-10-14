@@ -96,6 +96,8 @@ module.exports = function (app) {
     });
 
     app.post("/articles/:id", function (req, res) {
+        console.log(req.body);
+
         // Create a new note and pass the req.body to the entry
         db.Comment.create(req.body)
             .then(function (dbComment) {
