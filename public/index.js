@@ -43,17 +43,13 @@ $(function () {
 
 
     $(".saveComment").on("click", function () {
-        let newComment = {
-            author: $("#author").val().trim(),
-            body: $("#userComment").val().trim()
-
-        }
+        let body = $("#userComment").val().trim()
         var id = $(this).attr('id');
         console.log("clicked" + id);
         $.ajax({
             url: "/articles/" + id,
             method: "POST",
-            data: newComment
+            data: body
         }).then(
             function (data) {
                 console.log(data);
