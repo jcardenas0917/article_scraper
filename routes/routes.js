@@ -132,12 +132,4 @@ module.exports = function (app) {
         });
 
     });
-
-    app.get("/display-saved/", function (req, res) {
-        db.Article.find(
-            { saved: true }
-        ).then(function (data) {
-            res.json(data);
-        });
-    });
 };
