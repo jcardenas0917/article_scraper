@@ -1,4 +1,13 @@
 $(function () {
+
+    const displayArticles = data => {
+        data.comment.forEach(function (article, i) {
+            $(".savedComment").append("<p>" + data.comment[i].body + "</p>");
+        })
+    }
+
+
+
     $("#scrape").on("click", function (event) {
         event.preventDefault();
         $.getJSON("/scrape", function (data) {
@@ -67,17 +76,15 @@ $(function () {
             .then(function (data) {
                 console.log(data);
                 // The title of the article
-                $(".savedComment").append("<p>" + data.comment + "</p>");
-                // If there's a note in the article
-                if (data.comment) {
-                    $(".userComment").val(data.comment.body);
-                }
+                displayArticles(data);
             });
+        $(".savedComment").empty();
     });
 
     $(".addComment").on("click", function () {
         var id = $(this).attr('id');
         $(".saveComment").attr("data-id", id)
+        $(".article").attr("data-id", id)
         console.log("clicked" + id);
         $.ajax({
             url: "/articles/" + id,
@@ -85,10 +92,9 @@ $(function () {
         }).then(
             function (data) {
                 console.log(data);
-                // data.forEach(function (comment, index) {
-                //     $("#savedComment").append(data[index].author, data[index].body)
-                // })
+                displayArticles(data);
             });
+        $(".savedComment").empty();
     });
 
 });
