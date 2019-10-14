@@ -43,16 +43,34 @@ $(function () {
 
 
     $(".saveComment").on("click", function () {
-        let body = $("#userComment").val().trim()
-        var id = $(this).attr('id');
+
+        let id = $(this).attr('id');
         console.log("clicked" + id);
         $.ajax({
             url: "/articles/" + id,
             method: "POST",
-            data: body
+            data: {
+                body: $(".userComment").val().trim()
+            }
         }).then(
             function (data) {
                 console.log(data);
+            });
+        $(".userComment").val("");
+
+        $.ajax({
+            method: "GET",
+            url: "/articles/" + id
+        })
+            // With that done, add the note information to the page
+            .then(function (data) {
+                console.log(data);
+                // The title of the article
+                $(".savedComment").append("<p>" + data.comment + "</p>");
+                // If there's a note in the article
+                if (data.comment) {
+                    $(".userComment").val(data.comment.body);
+                }
             });
     });
 

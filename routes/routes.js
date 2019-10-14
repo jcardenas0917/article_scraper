@@ -47,13 +47,7 @@ module.exports = function (app) {
             console.log(data)
             res.render("saved", hbsObject);
         });
-        // db.Comment.find({}, function (err, note) {
-        //     let commentObject = {
-        //         comment: note
-        //     };
-        //     console.log(note)
-        //     res.render("saved", commentObject);
-        // })
+
     });
     app.get("/articles", function (req, res) {
         // Find all results from the scrapedData collection in the db
@@ -63,9 +57,22 @@ module.exports = function (app) {
         });
     });
 
+    app.get("/comments", function (req, res) {
+        // Find all results from the scrapedData collection in the db
+        db.Comment.find({}, function (error, data) {
+            console.log(data)
+            res.json(data);
+        });
+    });
+
+
     app.get("/drop", function (req, res) {
         // Find all results from the scrapedData collection in the db
         db.Article.deleteMany({}, function (err, del) {
+
+        });
+
+        db.Comment.deleteMany({}, function (err, del) {
 
         });
         res.send("Collection Dropped")
