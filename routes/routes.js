@@ -3,15 +3,12 @@ let cheerio = require("cheerio");
 let db = require("../models");
 module.exports = function (app) {
 
-    // Database configuration
+    // scraping article
     app.get("/scrape", function (req, res) {
-        // Make a request via axios for the article section of reddit
         axios.get("https://www.nytimes.com/section/world").then(function (response) {
-            // Load the html body from axios into cheerio
             var $ = cheerio.load(response.data);
-            // For each element with a "title" class
             $("article").each(function (i, element) {
-                // Save the text and href of each link enclosed in the current element
+
                 let result = {};
                 result.title = $(element).children().children("h2").text();
                 result.link = $(element).find("a").attr("href");
@@ -26,11 +23,12 @@ module.exports = function (app) {
                         console.log(err);
                     });
             });
-            // Send a "Scrape Complete" message to the browser
+
             res.send("Scrape Complete");
         });
     });
 
+    //render index page and pass data
     app.get("/", function (req, res) {
         db.Article.find({}, function (err, data) {
             let hbsObject = {
@@ -39,6 +37,8 @@ module.exports = function (app) {
             res.render("index", hbsObject);
         })
     });
+
+    //render saved articles page
     app.get("/saved", function (req, res) {
         db.Article.find({}, function (err, data) {
             let hbsObject = {
@@ -49,35 +49,33 @@ module.exports = function (app) {
         });
 
     });
+
+    //articles api
     app.get("/articles", function (req, res) {
-        // Find all results from the scrapedData collection in the db
         db.Article.find({}, function (error, data) {
             console.log(data)
             res.json(data);
         });
     });
 
+    //comments api
     app.get("/comments", function (req, res) {
-        // Find all results from the scrapedData collection in the db
         db.Comment.find({}, function (error, data) {
             console.log(data)
             res.json(data);
         });
     });
 
-
+    //drop all collections to start again
     app.get("/drop", function (req, res) {
-        // Find all results from the scrapedData collection in the db
         db.Article.deleteMany({}, function (err, del) {
-
         });
 
         db.Comment.deleteMany({}, function (err, del) {
-
         });
         res.send("Collection Dropped")
     });
-
+    //update articles to saved
     app.put("/save-Article/:id", function (req, res) {
         db.Article.findByIdAndUpdate({ _id: req.params.id }, {
             $set: { saved: true }
@@ -85,7 +83,7 @@ module.exports = function (app) {
             res.json(data);
         });
     });
-
+    //update articles to NOT saved
     app.delete("/delete-Article/:id", function (req, res) {
         db.Article.findByIdAndUpdate({ _id: req.params.id },
             {
@@ -95,25 +93,23 @@ module.exports = function (app) {
             });
     });
 
+    //Post comment on saved article and create the comments collection
     app.post("/articles/:id", function (req, res) {
         console.log(req.body);
-
-        // Create a new note and pass the req.body to the entry
         db.Comment.create(req.body)
             .then(function (dbComment) {
                 return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { comment: dbComment._id } }, { new: true });
             })
             .then(function (dbArticle) {
-                // If we were able to successfully update an Article, send it back to the client
+                nt
                 res.json(dbArticle);
             })
             .catch(function (err) {
-                // If an error occurred, send it to the client
                 res.json(err);
             });
     });
 
-
+    //get the article ID and include the comment to diplay on modal
     app.get("/articles/:id", function (req, res) {
         db.Article.findOne({ _id: req.params.id })
             .populate("comment")
@@ -124,7 +120,7 @@ module.exports = function (app) {
                 res.json(err);
             });
     });
-
+    //delete comment
     app.delete("/delete-comment/:id", function (req, res) {
         db.Comment.findByIdAndRemove(req.params.id, (err, comment) => {
             if (err) return res.status(500).send(err);

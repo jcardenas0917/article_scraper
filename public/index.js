@@ -1,12 +1,13 @@
 $(function () {
 
+    //display comments on Modal
     const displayArticles = data => {
         data.comment.forEach(function (article, i) {
             var button = $("<button>").text("x").attr("class", "btn btn-danger delete").attr("data-id", data.comment[i]._id);
             $(".savedComment").append("<p>" + data.comment[i].body + "</p>", button);
         })
     }
-
+    //Event to start the scrape
     $("#scrape").on("click", function (event) {
         event.preventDefault();
         $.getJSON("/scrape", function (data) {
@@ -14,6 +15,7 @@ $(function () {
         });
         location.reload();
     });
+    //clear the scrapre and drops collections
     $("#clear").on("click", function (event) {
         event.preventDefault();
         $.getJSON("/drop", () => {
@@ -23,11 +25,10 @@ $(function () {
         $("#display").empty();
         $("#savedCard").empty();
     });
-
+    //sets article to saved
     $(document).on("click", '.saved', function () {
         var id = $(this).attr('id');
         console.log("Article ID: " + id);
-
         $.ajax({
             type: "PUT",
             url: "/save-Article/" + id,
@@ -36,7 +37,7 @@ $(function () {
 
         });
     });
-
+    //Removes article from saved list
     $(".deleteArticle").on("click", function () {
         console.log("deleteButton clicked");
         var id = $(this).attr('id');
@@ -49,7 +50,7 @@ $(function () {
             });
     });
 
-
+    //Save comments on DB
     $(".saveComment").on("click", function () {
 
         let id = $(this).attr('data-id');
@@ -80,6 +81,7 @@ $(function () {
         $(".savedComment").empty();
     });
 
+    //launches modal and pull the comments 
     $(".addComment").on("click", function () {
         let id = $(this).attr('id');
         $(".saveComment").attr("data-id", id);
@@ -96,6 +98,7 @@ $(function () {
         $(".savedComment").empty();
     });
 
+    //delete comments
     $(document).on("click", "button.delete", function (event) {
         event.preventDefault();
         console.log("clicked delete")
