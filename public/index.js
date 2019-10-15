@@ -2,13 +2,10 @@ $(function () {
 
     const displayArticles = data => {
         data.comment.forEach(function (article, i) {
-
-            let button = $("<button>").text("x").attr("class", "del");
+            var button = $("<button>").text("x").attr("class", "delete").attr("data-id", data.comment[i]._id);
             $(".savedComment").append("<p>" + data.comment[i].body + "</p>", button);
         })
     }
-
-
 
     $("#scrape").on("click", function (event) {
         event.preventDefault();
@@ -84,7 +81,7 @@ $(function () {
     });
 
     $(".addComment").on("click", function () {
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
         $(".saveComment").attr("data-id", id);
         $(".article").attr("data-id", id);
         console.log("clicked" + id);
@@ -98,15 +95,18 @@ $(function () {
             });
         $(".savedComment").empty();
     });
-    $(".del").on("click", function (event) {
+
+    $(document).on("click", "button.delete", function (event) {
         event.preventDefault();
         console.log("clicked delete")
-        // $('#confirm').modal({
-        //     show: true,
-        // });
-        // $.ajax({
-        //     method: "DELETE",
-        //     url: "/api/cars/" + id
-        // }).then(getCars);
+        let id = $(this).attr('data-id');
+        $.ajax({
+            url: "/delete-comment/" + id,
+            method: "DELETE",
+        }).then(
+            function (data) {
+                console.log(data);
+                location.reload();
+            });
     });
 });
