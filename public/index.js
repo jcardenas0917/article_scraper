@@ -2,7 +2,7 @@ $(function () {
 
     const displayArticles = data => {
         data.comment.forEach(function (article, i) {
-            var button = $("<button>").text("x").attr("class", "delete").attr("data-id", data.comment[i]._id);
+            var button = $("<button>").text("x").attr("class", "btn btn-danger delete").attr("data-id", data.comment[i]._id);
             $(".savedComment").append("<p>" + data.comment[i].body + "</p>", button);
         })
     }
@@ -106,6 +106,7 @@ $(function () {
         }).then(
             function (data) {
                 console.log(data);
+                alert("commet deleted");
                 location.reload();
             });
     });
