@@ -3,7 +3,7 @@ let cheerio = require("cheerio");
 let db = require("./models");
 module.exports = function (app) {
 
-    // scraping articlegit s
+    // scraping articlegit
     app.get("/scrape", function (req, res) {
         axios.get("https://www.nytimes.com/section/world").then(function (response) {
             var $ = cheerio.load(response.data);
