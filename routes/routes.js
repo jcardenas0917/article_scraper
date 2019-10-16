@@ -3,12 +3,11 @@ let cheerio = require("cheerio");
 let db = require("../models");
 module.exports = function (app) {
 
-    // scraping article
+    // scraping articlegit s
     app.get("/scrape", function (req, res) {
         axios.get("https://www.nytimes.com/section/world").then(function (response) {
             var $ = cheerio.load(response.data);
             $("article").each(function (i, element) {
-
                 let result = {};
                 result.title = $(element).children().children("h2").text();
                 result.link = $(element).find("a").attr("href");
