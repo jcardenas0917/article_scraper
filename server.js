@@ -16,11 +16,13 @@ let exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+var PORT = process.env.PORT || 3000;
+
 var MONGODB_URI = process.env.MONGODB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/newsScrape";
 
 mongoose.connect(MONGODB_URI);
 require("./routes/routes.js")(app)
 // Listen on port 3000
-app.listen(3000, function () {
+app.listen(PORT, function () {
     console.log("App running on port 3000!");
 });
