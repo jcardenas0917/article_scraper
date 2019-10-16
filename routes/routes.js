@@ -1,6 +1,6 @@
 let axios = require("axios");
 let cheerio = require("cheerio");
-let db = require("../models");
+let db = require("./models");
 module.exports = function (app) {
 
     // scraping article
