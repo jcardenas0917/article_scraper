@@ -21,7 +21,7 @@ var PORT = process.env.PORT || 3000;
 var MONGODB_URI = process.env.MONGODB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/newsScrape";
 
 mongoose.connect(MONGODB_URI);
-require("./routes/routes.js")(app)
+require("./routes")(app)
 // Listen on port 3000
 app.listen(PORT, function () {
     console.log("App running on port 3000!");
