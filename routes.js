@@ -1,6 +1,10 @@
 let axios = require("axios");
 let cheerio = require("cheerio");
-let db = require("./models");
+// let db = require("./models");
+let db = {
+    Article: require("./models/Article"),
+    Comment: require("./models/Comments")
+};
 module.exports = function (app) {
 
     // scraping articlegit
