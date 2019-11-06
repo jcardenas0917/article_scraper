@@ -104,7 +104,6 @@ module.exports = function (app) {
                 return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { comment: dbComment._id } }, { new: true });
             })
             .then(function (dbArticle) {
-                nt
                 res.json(dbArticle);
             })
             .catch(function (err) {
